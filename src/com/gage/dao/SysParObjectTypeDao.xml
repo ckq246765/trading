@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysParObjectTypeDao">
+	<select id="getAllAccountParObjectType" resultType="Integer">
+		select count(1) from tbl_par_object
+	</select>
+	<select id="getObjectCodeByParObjectTypeCode" resultType="String" parameterType="String">
+		select object_code from tbl_par_object where par_object_code = #{parObjectTypeCode}
+	</select>
+	<select id="getAllParObjectType" resultType="com.gage.beans.ParObjectType">
+		select 
+			tbl_par_object.par_object_code as parObjectTypeCode, 
+			tbl_par_object.par_object_name as parObjectTypeName,
+			tbl_par_object.object_code as objectTypeCode,
+			tbl_object.object_name as objectTypeName
+			from tbl_par_object left join tbl_object on tbl_par_object.object_code = tbl_object.object_code limit ${arg0},${arg1}
+	</select>
+	
+	<select id="getAllObjectType" resultType="com.gage.beans.ObjectType">
+		select object_code as objectCode, object_name as objectName from tbl_object
+	</select>
+	
+	<select id="getParObjectTypeCode" resultType="String">
+		select par_object_code from tbl_par_object where par_object_code = #{arg0} and object_code = #{arg1}
+	</select>
+	
+	<select id="checkParObjectTypeCode" resultType="String" parameterType="String">
+		select par_object_code from tbl_par_object where par_object_code = #{parObjectTypeCode}
+	</select>
+	
+	<insert id="saveparObjectType" parameterType="com.gage.beans.ParObjectType" >
+		insert into tbl_par_object(par_object_code,par_object_name,object_code) 
+		values(#{parObjectTypeCode},#{parObjectTypeName},#{objectTypeCode})
+	</insert>
+	
+	<select id="getParObjectTypeByParObjectTypeCode" parameterType="String" resultType="com.gage.beans.ParObjectType">
+		select 
+			par_object_code as parObjectTypeCode,
+			par_object_name as parObjectTypeName,
+			object_code as objectTypeCode 
+		from tbl_par_object where par_object_code=#{parObjectTypeCode}
+	</select>
+	
+	<update id="changeParObjectType" parameterType="String">
+		update tbl_par_object 
+		set par_object_code=#{arg1},
+			par_object_name=#{arg2},
+			object_code=#{arg3}
+		where par_object_code = #{arg0}
+	</update>
+	<delete id="deleteParObject" parameterType="String">
+		delete from tbl_par_object where par_object_code in
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="getAllParObject" parameterType="String" resultType="com.gage.beans.ParObjectType">
+		select 
+			par_object_code as parObjectTypeCode, 
+			par_object_name as parObjectTypeName,
+			object_code as objectTypeCode
+		from tbl_par_object
+	</select>
+	
+	<select id="getAllTradingObjectAccount" resultType="Integer">
+		select count(*) from tbl_object_trading
+	</select>
+	
+	<select id="getAllTradingObject" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tot.trading_type_code as tradingTypeTode,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		order by tot.release_time DESC LIMIT ${no},${size} 
+	</select>
+	<select id="toObjectShowByObjectCode" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tot.trading_type_code as tradingTypeTode,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		where tot.object_code=#{arg0}
+		
+	</select>
+	<select id="getObjectTypeByObjectCode" resultType="String">
+		select par_object_code from tbl_object_trading where object_code = #{arg0}
+	</select>
+	<select id="toParObjectShowByObjectCode" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tot.trading_type_code as tradingTypeTode,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		where tot.par_object_code = #{arg0} and tot.object_code != #{arg1}
+		order by tot.release_time DESC LIMIT 0,10
+	</select>
+	<select id="getAllParObjectTypeByObjectCode" resultType="com.gage.beans.ParObjectType">
+		select 
+			par_object_code as parObjectTypeCode,
+			par_object_name as parObjectTypeName,
+			object_code as objectTypeCode 
+		from tbl_par_object where object_code=#{objectCode}
+	</select>
+	<select id="getAllTradingObjectTypeByObjectCode" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tot.trading_type_code as tradingTypeTode,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		<where>
+			<if test="objectCode!=null and objectCode!=''">
+				and tot.object_type_code = #{objectCode}
+			</if>
+		</where>
+		order by tot.release_time DESC LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="getAllTradingObjectTypeByParObjectCode" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tot.trading_type_code as tradingTypeTode,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		<where>
+			<if test="parObjectTypeCode!=null and parObjectTypeCode!=''">
+				and tot.par_object_code = #{parObjectTypeCode}
+			</if>
+		</where>
+		order by tot.release_time DESC LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="getTradingObjectByUserCode" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tpo.par_object_name	as parObjectName,
+			tot.trading_type_code as tradingTypeTode,
+			ttt.trading_type_name as tradingTypeName,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		LEFT JOIN tbl_trading_type ttt on tot.trading_type_code = ttt.trading_type_code
+		where tot.object_user_code = #{userCode}
+	</select>
+</mapper>

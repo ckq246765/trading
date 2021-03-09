@@ -1,0 +1,28 @@
+ul li{
+		display:inline;
+		line-height:24px;
+		height:auto;
+		float: left;
+		word-break:break-all;
+		word-wrap : break-word ;
+		padding:0px 5px; list-style:none;
+		}
+.goods-price--red,.goods-price--grey{
+	color: red;
+}
+a:link{
+text-decoration:none;
+display:inline-block/* 或者block */; 
+line-height:20px/* 或者font-size:0 */;
+}
+.a{
+	text-decoration:none;
+	display:inline-block/* 或者block */; 
+	line-height:200px/* 或者font-size:0 */;
+}
+img{ 
+	vertical-align:bottom
+}
+ul li a{
+	text-align: center;
+}

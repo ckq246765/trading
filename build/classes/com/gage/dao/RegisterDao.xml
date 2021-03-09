@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.RegisterDao">
+		
+	<select id="checkUser" parameterType="String" resultType="String">
+		select username from tbl_user where username = #{userName}
+	</select>
+	<insert id="saveUser" parameterType="com.gage.beans.User">
+		insert into tbl_user
+		(
+		user_code,
+		username,
+		password,
+		name,
+		sex,
+		age,
+		phone,
+		email,
+		address,
+		province_code,
+		city_code,
+		reg_date,
+		state)
+		values(
+		#{user_code},
+		#{userName},
+		#{passWord},
+		#{name},
+		#{sex},
+		#{age},
+		#{phone},
+		#{email},
+		#{address},
+		#{provinceCode},
+		#{cityCode},
+		#{regDate},
+		#{state})
+	</insert>
+
+</mapper>  

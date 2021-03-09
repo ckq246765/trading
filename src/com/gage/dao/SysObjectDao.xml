@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysObjectDao">
+	<select id="getAllAccountObject" resultType="Integer">
+		select count(1) from tbl_object
+	</select>
+	
+	<select id="getAllObject" resultType="com.gage.beans.ObjectType">
+		select object_code as objectCode,object_name as objectName from tbl_object limit ${arg0},${arg1}
+	</select>
+	
+	<select id="getObjectCode" resultType="String" parameterType="String">
+		select object_code from tbl_object where object_code= #{objectCode}
+	</select>
+	
+	<insert id="saveObject" parameterType="com.gage.beans.ObjectType">
+		insert into tbl_object (object_code,object_name) values(#{objectCode},#{objectName})
+	</insert>
+	
+	<select id="getobjectByCode" resultType="com.gage.beans.ObjectType">
+		select object_code as objectCode,object_name as objectName from tbl_object where object_code=#{arg0}
+	</select>
+	
+	<update id="changeObject" parameterType="com.gage.beans.ObjectType">
+		update tbl_object set object_name = #{objectName} where object_code = #{objectCode}
+	</update>
+	<delete id="deleteObject" parameterType="String">
+		delete from tbl_object where object_code in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

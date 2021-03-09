@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.UserDoDao">
+	<select id="getUserCode" resultType="String">
+		select user_code from tbl_user where username = #{userName}
+	</select>
+	<select id="getUserShoppingByUserCode" resultType="com.gage.beans.Shopping">
+		select 
+			object_code as objectCode,
+			pay_flag as payFlag,
+			fh_flag as fhFlag,
+			ys_flag as ysFlag,
+			pj_flag as pjFlag,
+			add_time as addDate,
+			user_code as userCode
+		from tbl_shop where user_code = #{userCode}
+	</select>
+	<delete id="deleteTradingObject" >
+		delete from tbl_shop where object_code in
+		<foreach collection="objectCode" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and user_code = #{userCode}
+	</delete>
+	<delete id="deleteTradingObjectByUserCode">
+		delete from tbl_object_trading where object_code in
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<update id="changeTradingObjectByUserCode" parameterType="com.gage.beans.TradingObject">
+		update tbl_object_trading 
+			set object_name = #{objectName},
+			sale_price = #{salePrice},
+			original_prince = #{originalPrince},
+			postage = #{postage},
+			provincecode = #{provincecode},
+			citycode = #{citycode},
+			text_descri = #{textDescri},
+			picture_descri = #{pictureDescri},
+			object_type_code = #{objectTypeCode},
+			par_object_code = #{parObjectCode},
+			trading_type_code = #{tradingTypeTode},
+			msg = #{msg},
+			want_trad_type_code = #{wantTradTypeCode},
+			object_address = #{objectAddress}
+		where object_code = #{objectCode}
+	</update>
+	<select id="getBeforePictureDescri" parameterType="String" resultType="String">
+		select picture_descri from tbl_object_trading where object_code = #{objectCode}
+	</select>
+	<insert id="addTradingObjectToShop" parameterType="String">
+		insert into tbl_shop (
+			object_code,
+			user_code,
+			add_time) 
+			values(
+			#{objectCode},
+			#{userCode},
+			#{currentDate}
+			)
+	</insert>
+	<select id="getOrderByUserAndObject" resultType="com.gage.beans.Order">
+		select 
+			object_name as objectDescribe,
+			sum(sale_price + postage) as orderAccount
+		from tbl_object_trading where object_code = #{objectCode}
+	</select>
+	<insert id="saveOrder" parameterType="com.gage.beans.Order">
+		insert into tbl_order 
+			(
+			order_code,
+			order_name,
+			order_account,
+			object_describe,
+			user_code,
+			order_date,
+			object_code
+			)
+			values
+			(
+			#{orderCode},	
+			#{orderName},
+			#{orderAccount},
+			#{objectDescribe},
+			#{userCode},		
+			#{orderDate},
+			#{objectCode} 
+			)
+	</insert>
+	<update id="toRecordForUser" parameterType="com.gage.beans.Order">
+		update tbl_order 
+		set trade_no = #{tradeNo},trade_status = #{tradeStatus}
+		where order_code = #{orderCode}
+	</update>
+	<select id="getUserCodeByOrderCode" resultType="String" parameterType="String">
+		select user_code from tbl_order where order_code = #{orderCode}
+	</select>
+	<select id="getAllOrderByUserPageAccount" resultType="Integer">
+		select count(*) from tbl_order where user_code = #{userCode}
+	</select>
+	<select id="getAllOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code 
+		where t.user_code = #{userCode} limit ${pageNo},${pageSize}
+	</select>
+	<select id="getAllNoPayOrderByUserPageAccount" resultType="Integer">
+		select count(*) from tbl_order where user_code = #{userCode} and trade_status is null OR trade_status = '0'
+	</select>
+	<select id="getAllNoPayOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code 
+		where t.user_code = #{userCode} and t.trade_status is null OR t.trade_status = '0' limit ${pageNo},${pageSize}
+	</select>
+	<select id="getAllNoFhOrderByUserPageAccount" resultType="Integer">
+		select count(*) from tbl_order where user_code = #{userCode} and trade_status = '1'  and fh_status is null OR fh_status = '0'
+	</select>
+	<select id="getAllNoFhOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri,
+			t.fh_status as fkStatus
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code 
+		where t.user_code = #{userCode} 
+		and t.trade_status = '1' 
+		and t.fh_status is null OR t.fh_status = '0' limit ${pageNo},${pageSize}
+	</select>
+	<select id="getAllNoYsOrderByUserPageAccount" resultType="Integer">
+		select count(*) from tbl_order 
+		where user_code = #{userCode} 
+		and trade_status = '1'  
+		and fh_status = '1'
+		and ys_status is null OR ys_status = '0'
+	</select>
+	<select id="getAllNoYsOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri,
+			t.fh_status as fkStatus,
+			t.ys_status as ysStatus
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code 
+		where t.user_code = #{userCode} and t.trade_status = '1' 
+		and t.fh_status = '1'
+		and  t.ys_status is null OR t.ys_status = '0' limit ${pageNo},${pageSize}
+	</select>
+	<update id="yanShou">
+		update tbl_order set ys_status = '1' where order_code = #{orderCode} and user_code = #{userCode}
+	</update>
+	<select id="getObjectByOrderCode" parameterType="String" resultType="String">
+		select object_code from tbl_order where order_code=#{orderCode}
+	</select>
+	<update id="updateTradingObjectByTradingUser" parameterType="String">
+		update tbl_object_trading set 
+			trad_flag = '1',
+			trading_date = #{currentDate},
+			trading_user = #{userCode}
+		where object_code = #{objectCode}
+	</update>
+	<select id="getAllNoPjOrderByUserPageAccount" resultType="Integer">
+		select count(*) from tbl_order 
+		where user_code = #{userCode} 
+		and trade_status = '1'  
+		and fh_status = '1'
+		and ys_status = '1'
+	</select>
+	<select id="getAllNoPjOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri,
+			t.fh_status as fkStatus,
+			t.ys_status as ysStatus,
+			t.pj_status as pjStatus
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code 
+		where t.user_code = #{userCode} 
+		and t.trade_status = '1' 
+		and t.fh_status = '1'
+		and  t.ys_status = '1' limit ${pageNo},${pageSize}
+	</select>
+	<select id="TradingObjectByObjectCode" parameterType="String" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tpo.par_object_name	as parObjectName,
+			tot.trading_type_code as tradingTypeTode,
+			ttt.trading_type_name as tradingTypeName,
+			tot.trading_date as tradingDate,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		LEFT JOIN tbl_trading_type ttt on tot.trading_type_code = ttt.trading_type_code
+		where tot.object_code = #{objectCode}
+	</select>
+	<insert id="saveEvaluate" parameterType="com.gage.beans.Comment">
+		insert into tbl_evaluation
+			(object_code,
+			evaluate_text,
+			evaluate_picture,
+			evaluate_date,
+			evaluate_user,
+			user_code,
+			evaluate_code)
+			values(
+			#{objectCode},
+			#{evaluateText},
+			#{evaluatePicture},
+			#{evaluateDate},
+			#{evaluateUser},
+			#{userCode},
+			#{evaluateCode}
+			)
+	</insert>
+	<update id="updateOrderPJ" parameterType="String">
+		update tbl_order set pj_status = '1'  where order_code = #{orderCode}
+	</update>
+	<select id="getAllWriteCommentByUserPageAccount" parameterType="String" resultType="Integer">
+		select count(*) from tbl_evaluation where evaluate_user = #{userCode}
+	</select>
+	<select id="getAllWriteCommentByUser" resultType="com.gage.beans.Comment">
+		select 
+			te.object_code as objectCode,
+			te.evaluate_text as evaluateText,
+			te.evaluate_picture as evaluatePicture,
+	 		te.evaluate_date as evaluateDate,
+	 		te.evaluate_user as evaluateUser,
+			te.user_code as userCode,
+			tot.text_descri as text_descri,
+			tot.picture_descri as text_descri,
+			te.evaluate_code as evaluateCode
+		from tbl_evaluation te
+		LEFT JOIN tbl_object_trading tot on te.object_code = tot.object_code
+		where evaluate_user = #{userCode} limit ${pageNo},${pageSize}
+	</select>
+	<delete id="deleteCommentByUser" parameterType="String">
+		delete from tbl_evaluation 
+		where object_code = #{objectCode}
+		and evaluate_user = #{evaluateUser}
+		and evaluate_code = #{evaluateCode}
+	</delete>
+	<select id="getAllReceiveCommentByUserPageAccount" resultType="Integer" parameterType="String">
+		select count(*) from tbl_evaluation where user_code = #{userCode}
+	</select>
+	<select id="getAllReceiveCommentByUser" resultType="com.gage.beans.Comment">
+		select 
+			te.object_code as objectCode,
+			te.evaluate_text as evaluateText,
+			te.evaluate_picture as evaluatePicture,
+	 		te.evaluate_date as evaluateDate,
+	 		te.evaluate_user as evaluateUser,
+			te.user_code as userCode,
+			tot.text_descri as text_descri,
+			tot.picture_descri as text_descri,
+			te.evaluate_code as evaluateCode,
+			tu.username as evaluateUserName
+		from tbl_evaluation te
+		LEFT JOIN tbl_object_trading tot on te.object_code = tot.object_code
+		LEFT JOIN tbl_user tu on tu.user_code = te.evaluate_user
+		where te.user_code = #{userCode} limit ${pageNo},${pageSize} 
+	</select>
+	
+	<select id="getTradingObjectByUserCode" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri,
+			t.object_user_fh as object_user_fh,
+			tot.text_descri as text_descri,
+			tu.username as userName,
+			tu.phone as phone,
+			tu.email as email,
+			tu.address as address
+		from tbl_object_trading tot
+		INNER JOIN tbl_order t on t.object_code = tot.object_code 
+		INNER JOIN tbl_user tu on tu.user_code = tot.trading_user
+		where tot.object_user_code = #{userCode} and tot.trad_flag = '1'
+	</select>
+	<select id="getAllUserObjectOrderByUserPage" resultType="Integer" parameterType="String">
+		select 
+			count(*)
+		from tbl_object_trading tot
+		INNER JOIN tbl_order t on t.object_code = tot.object_code 
+		INNER JOIN tbl_user tu on tu.user_code = tot.trading_user
+		where tot.object_user_code = #{userCode} and tot.trad_flag = '1'
+	</select>
+	<select id="getAllUserObjectOrderByUser" resultType="com.gage.beans.Order">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			t.order_account as orderAccount,
+			t.object_describe as objectDescribe,
+			t.user_code as userCode,
+			t.order_date as orderDate,
+			t.object_code as objectCode,
+			t.trade_no as tradeNo,
+			t.trade_status as tradeStatus,
+			tot.picture_descri as pictureDescri,
+			t.object_user_fh as object_user_fh,
+			tot.text_descri as text_descri,
+			tu.username as userName,
+			tu.phone as phone,
+			tu.email as email,
+			tu.address as address
+		from tbl_object_trading tot
+		INNER JOIN tbl_order t on t.object_code = tot.object_code 
+		INNER JOIN tbl_user tu on tu.user_code = tot.trading_user
+		where tot.object_user_code = #{userCode} and tot.trad_flag = '1'
+		limit ${pageNo},${pageSize}
+	</select>
+	<update id="sureFh" parameterType="String">
+		update tbl_order 
+		set object_user_fh = '1',
+			fh_status = '1' 
+		 where order_code = #{orderCode}
+	</update>
+	<select id="getUserMsg" resultType="com.gage.beans.User">
+		select 
+		user_code as userCode,
+		phone as phone,
+		email as email,
+		address as address
+		from tbl_user where user_code = #{userCode}
+	</select>
+	<select id="getTradingObject" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tpo.par_object_name	as parObjectName,
+			tot.trading_type_code as tradingTypeTode,
+			ttt.trading_type_name as tradingTypeName,
+			tot.trading_date as tradingDate,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpo.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		LEFT JOIN tbl_trading_type ttt on tot.trading_type_code = ttt.trading_type_code
+		where tot.object_code = #{objectCode}
+	</select>
+	<insert id="saveZengYu" parameterType="com.gage.beans.Order">
+		insert into tbl_order 
+			(
+			order_code,
+			order_name,
+			order_account,
+			object_describe,
+			user_code,
+			order_date,
+			object_code,
+			trade_status
+			)
+			values
+			(
+			#{orderCode},	
+			#{orderName},
+			#{orderAccount},
+			#{objectDescribe},
+			#{userCode},		
+			#{orderDate},
+			#{objectCode},
+			#{tradeStatus} 
+			)
+	</insert>
+</mapper>

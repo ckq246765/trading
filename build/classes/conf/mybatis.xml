@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 声明别名 -->
+	<typeAliases>
+		<package name="com.gage.beans"/>
+	</typeAliases>
+	
+	<!-- 声明sql映射文件的位置 -->
+	<mappers>
+	    <!-- 
+	               使用package的要求：
+	        1.接口名和sql映射文件名一样。
+	        2.接口和sql映射文件在同一目录
+	     -->
+		<package name="com.gage.dao"/>
+	</mappers>
+
+</configuration>

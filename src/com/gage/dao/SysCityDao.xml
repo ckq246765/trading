@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysCityDao">
+	<select id="getAccountCity" resultType="Integer">
+		select count(*) from tbl_city
+	</select>
+	<select id="getAllCity" resultType="com.gage.beans.City">
+		select 
+			tbl_city.city_code as cityCode,
+			tbl_city.city_name as cityName,
+			tbl_city.province_code as provinceCode,
+			tbl_province.province_name as provinceName
+		from tbl_city 
+		left join tbl_province on tbl_city.province_code = tbl_province.province_code limit ${arg0},${arg1};
+	</select>
+	<select id="getAllProvince" resultType="com.gage.beans.Province">
+		select province_code as provinceCode,province_name as provinceName from tbl_province
+	</select>
+	<select id="getCityCode" resultType="String">
+		select city_code from tbl_city where city_code = #{arg0} and province_code = #{arg1}
+	</select>
+	<select id="checkCityCode" resultType="String" parameterType="String">
+		select city_code from tbl_city where city_code = #{cityCode}
+	</select>
+	
+	<insert id="saveCity" parameterType="com.gage.beans.City" >
+		insert into tbl_city(city_code,city_name,province_code) values(#{cityCode},#{cityName},#{provinceCode})
+	</insert>
+	
+	<select id="getCityByCityCode" parameterType="String" resultType="com.gage.beans.City">
+		select city_code as cityCode,city_name as cityName,province_code as provinceCode from tbl_city where city_code=#{cityCode}
+	</select>
+	
+	<update id="changeCity" parameterType="String">
+		update tbl_city 
+		set city_code=#{arg1},
+			city_name=#{arg2},
+			province_code=#{arg3}
+		where city_code = #{arg0}
+	</update>
+	
+	<delete id="deleteCity" parameterType="String">
+		delete from tbl_city where city_code in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="getAllCityForRegister" resultType="com.gage.beans.City">
+		select 
+			tbl_city.city_code as cityCode,
+			tbl_city.city_name as cityName,
+			tbl_city.province_code as provinceCode,
+			tbl_province.province_name as provinceName
+		from tbl_city 
+		left join tbl_province on tbl_city.province_code = tbl_province.province_code
+	</select>
+	
+	<select id="getAllCityByProvinceCode" resultType="com.gage.beans.City">
+		select 
+			tbl_city.city_code as cityCode,
+			tbl_city.city_name as cityName,
+			tbl_city.province_code as provinceCode,
+			tbl_province.province_name as provinceName
+		from tbl_city 
+		left join tbl_province on tbl_city.province_code = tbl_province.province_code
+		where tbl_city.province_code = #{provinceCode}
+	</select>
+</mapper>

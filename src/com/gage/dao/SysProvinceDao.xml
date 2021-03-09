@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysProvinceDao">
+	<select id="getAllProvince" resultType="com.gage.beans.Province">
+		select province_code as provinceCode,province_name as provinceName from tbl_province limit ${arg0},${arg1}
+	</select>
+	
+	<select id="getAllAccountProvince" resultType="Integer">
+		select count(1) from tbl_province
+	</select>
+	<select id="getProvinceCode" resultType="String" parameterType="String">
+		select province_code from tbl_province where province_code=#{provinceCode}
+	</select>
+	<insert id="saveProvince" parameterType="com.gage.beans.Province">
+		insert into tbl_province (province_code,province_name) values(#{provinceCode},#{provinceName})
+	</insert>
+	<select id="getProvinceByCode" resultType="com.gage.beans.Province">
+		select province_code as provinceCode,province_name as provinceName from tbl_province where province_code=#{arg0}
+	</select>
+	<update id="changeProvince" parameterType="com.gage.beans.Province">
+		update tbl_province set province_name = #{provinceName} where province_code = #{provinceCode}
+	</update>
+	<delete id="deleteProvince" parameterType="String">
+		delete from tbl_province where province_code in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

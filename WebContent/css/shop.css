@@ -1,0 +1,16 @@
+ul li{
+		display:inline;
+		line-height:24px;
+		height:auto;
+		float: left;
+		word-break:break-all;
+		word-wrap : break-word ;
+		padding:0px 5px; list-style:none;
+}
+a:link{
+	text-decoration: none;
+}
+table th{
+	text-align: center;
+	color: red;
+}

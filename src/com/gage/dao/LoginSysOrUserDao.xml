@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.LoginSysOrUserDao">
+	<select id="selectFromSys" resultType="int" parameterType="LoginSysOrUser">
+		select count(1) from tbl_sys_user where username=#{userName} and password=#{passWord}
+	</select>
+	<select id="loginUserFind" resultType="int" parameterType="com.gage.beans.LoginSysOrUser">
+		select count(1) from tbl_user where username=#{userName} and password=#{passWord}
+	</select>
+	<select id="checkUserPwd" resultType="int">
+		select count(*) from tbl_user where username=#{arg0} and password=#{arg1}
+	</select>
+	<update id="changeUserPwd">
+		update tbl_user set password = #{arg1} where username=#{arg0}
+	</update>
+	<select id="getUserByUserName" parameterType="String" resultType="com.gage.beans.User">
+		select 
+			user_code as user_code,
+			username as userName,
+			name as name,
+			sex as sex, 
+			age as age,
+			phone as phone,
+			email as email,
+			address as address,
+			province_code as provinceCode,
+			city_code as cityCode
+		from tbl_user where username = #{arg0}
+	</select>
+	<update id="changeUserMsg" parameterType="com.gage.beans.User">
+		update tbl_user set
+			username = #{userName},
+			name = #{name},
+			sex = #{sex}, 
+			age = #{age},
+			phone = #{phone},
+			email = #{email},
+			address = #{address},
+			province_code = #{provinceCode},
+			city_code = #{cityCode}
+		where user_code = #{user_code}
+	</update>
+	
+	<select id="getAllTradingType" resultType="com.gage.beans.TradingType">
+		select 
+			trading_type_code as tradingTypeCode,
+			trading_type_name as tradingTypeName 
+		from tbl_trading_type
+	</select>
+	<select id="getObjectUserCodeByUserName" parameterType="String" resultType="String">
+		select user_code from tbl_user where username = #{objectUserName}
+	</select>
+	
+	<insert id="saveUserObj" parameterType="com.gage.beans.TradingObject">
+		insert into tbl_object_trading
+			(object_code,
+			object_name,
+			sale_price,
+			original_prince,
+			postage,
+			provincecode,
+			citycode,
+			text_descri,
+			picture_descri,
+			object_type_code,
+			par_object_code,
+			trading_type_code,
+			release_time,
+			msg,
+			want_trad_type_code,
+			object_user_code,
+			object_address)
+		values(
+			#{objectCode},
+			#{objectName},
+			#{salePrice},
+			#{originalPrince},
+			#{postage},
+			#{provincecode},
+			#{citycode},
+			#{textDescri},
+			#{pictureDescri},
+			#{objectTypeCode},
+			#{parObjectCode},
+			#{tradingTypeTode},
+			#{releaseTime},
+			#{msg},
+			#{wantTradTypeCode},
+			#{objectUserCode},
+			#{objectAddress}
+		)
+	</insert>
+	
+	<select id="getProvinceCodeByCityCode" parameterType="String" resultType="String">
+		select province_code from tbl_city where city_code=#{arg0}
+	</select>
+	
+	<select id="getLoginUserStatus" resultType="String" parameterType="com.gage.beans.LoginSysOrUser">
+		select state from tbl_user where username=#{userName} and password=#{passWord}
+	</select>
+</mapper>

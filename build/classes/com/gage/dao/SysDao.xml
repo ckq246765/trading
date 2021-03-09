@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysDao">
+	<select id="findSysSource" parameterType="String" resultType="com.gage.beans.Sys">
+		select username,password,name,email from tbl_sys_user where username = #{userName}
+	</select>
+	
+	<update id="changeSysPwd">
+		update tbl_sys_user set password = #{arg1} where username=#{arg0}
+	</update>
+	
+	<select id="checkPwd" resultType="int">
+		select count(*) from tbl_sys_user where username=#{arg0} and password=#{arg1}
+	</select>
+	
+	<select id="getAllUserTradingObjectForSys" resultType="com.gage.beans.TradingObject">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tot.citycode as citycode,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tpo.par_object_name	as parObjectName,
+			tot.trading_type_code as tradingTypeTode,
+			ttt.trading_type_name as tradingTypeName,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		LEFT JOIN tbl_trading_type ttt on tot.trading_type_code = ttt.trading_type_code
+		order by tot.release_time DESC LIMIT ${no},${pageSize}
+	</select>
+	<delete id="deleteObjectByObjectCode" parameterType="String">
+		delete from tbl_object_trading where object_code = #{objectCode}
+	</delete>
+	<select id="toObjectShowByObjectCode" resultType="com.gage.beans.TradingObject" parameterType="String">
+		select 
+			tot.object_code as objectCode,
+			tot.object_name as objectName,
+			tot.sale_price as salePrice,
+			tot.original_prince as originalPrince,
+			tot.postage as postage,
+			tot.provincecode as provincecode,
+			tp.province_name as provinceName,
+			tot.citycode as citycode,
+			tc.city_name as cityName,
+			tot.text_descri as textDescri,
+			tot.picture_descri as pictureDescri,
+			tot.par_object_code as parObjectCode,
+			tpo.par_object_name	as parObjectName,
+			tot.trading_type_code as tradingTypeTode,
+			ttt.trading_type_name as tradingTypeName,
+			tot.trading_date as tradingDate,
+			tot.trading_user as tradingUser,
+			tot.trad_flag as tradFlag,
+			tot.release_time as releaseTime,
+			tot.msg as msg,
+			tot.want_trad_type_code as wantTradTypeCode,
+			tpot.par_object_name as wantTradTypeName,
+			tot.object_user_code as objectUserCode,
+			tu.`name` as objectUserName,
+			tot.object_address as objectAddress
+		from tbl_object_trading tot
+		LEFT JOIN tbl_province tp on tot.provincecode = tp.province_code
+		LEFT JOIN tbl_city tc on tot.citycode = tc.city_code
+		LEFT JOIN tbl_par_object tpo on tot.par_object_code = tpo.par_object_code
+		LEFT JOIN tbl_par_object tpot on tot.want_trad_type_code = tpot.par_object_code
+		LEFT JOIN tbl_user tu on tot.object_user_code = tu.user_code
+		LEFT JOIN tbl_trading_type ttt on tot.trading_type_code = ttt.trading_type_code
+		where tot.object_code = #{objectCode}
+	</select>
+	<select id="getAllUserAccount" resultType="Integer" parameterType="com.gage.beans.SearchUser">
+		select count(*) from tbl_user 
+		<where>
+			<if test="searchUser.userName != null and searchUser.userName != ''">
+			 	and username like '%' #{searchUser.userName} '%'
+			</if>	
+			<if test="searchUser.name != null and searchUser.name != ''">
+			 	and name like '%' #{searchUser.name} '%'
+			</if>	
+			<if test="searchUser.sex != null and searchUser.sex != ''">
+			 	and sex like #{searchUser.sex} 
+			</if>	
+			<if test="searchUser.age != null and searchUser.age != ''">
+			 	and age like #{searchUser.age}
+			</if>	
+			<if test="searchUser.phone != null and searchUser.phone != ''">
+			 	and phone like '%' #{searchUser.phone} '%'
+			</if>	
+			<if test="searchUser.email != null and searchUser.email != ''">
+			 	and email like '%' #{searchUser.email} '%'
+			</if>	
+			<if test="searchUser.province != null and searchUser.province != ''">
+			 	and province_code like '%' #{searchUser.province} '%'
+			</if>	
+			<if test="searchUser.city != null and searchUser.city != ''">
+			 	and city_code like '%' #{searchUser.city} '%'
+			</if>	
+			<if test="searchUser.adress != null and searchUser.adress != ''">
+			 	and address like '%' #{searchUser.adress} '%'
+			</if>	
+			<if test="searchUser.startTime != null and searchUser.startTime != ''">
+			 	and reg_date &gt;= #{searchUser.startTime}
+			</if>	
+			<if test="searchUser.endTime != null and searchUser.endTime != ''">
+			 	and reg_date &lt;= #{searchUser.endTime}
+			</if>	
+		</where>
+	</select>
+	<select id="getAllUserForSys" resultType="com.gage.beans.User" parameterType="com.gage.beans.SearchUser">
+		select 
+			user_code as user_code,
+			username as userName,
+			name as name,
+			reg_date as regDate,
+			state as state
+		from tbl_user
+			<where>
+			<if test="searchUser.userName != null and searchUser.userName != ''">
+			 	and username like '%' #{searchUser.userName} '%'
+			</if>	
+			<if test="searchUser.name != null and searchUser.name != ''">
+			 	and name like '%' #{searchUser.name} '%'
+			</if>	
+			<if test="searchUser.sex != null and searchUser.sex != ''">
+			 	and sex = #{searchUser.sex} 
+			</if>	
+			<if test="searchUser.age != null and searchUser.age != ''">
+			 	and age = #{searchUser.age}
+			</if>	
+			<if test="searchUser.phone != null and searchUser.phone != ''">
+			 	and phone like '%' #{searchUser.phone} '%'
+			</if>	
+			<if test="searchUser.email != null and searchUser.email != ''">
+			 	and email like '%' #{searchUser.email} '%'
+			</if>	
+			<if test="searchUser.province != null and searchUser.province != ''">
+			 	and province_code like '%' #{searchUser.province} '%'
+			</if>	
+			<if test="searchUser.city != null and searchUser.city != ''">
+			 	and city_code like '%' #{searchUser.city} '%'
+			</if>	
+			<if test="searchUser.adress != null and searchUser.adress != ''">
+			 	and address like '%' #{searchUser.adress} '%'
+			</if>	
+			<if test="searchUser.startTime != null and searchUser.startTime != ''">
+			 	and reg_date &gt;= #{searchUser.startTime}
+			</if>	
+			<if test="searchUser.endTime != null and searchUser.endTime != ''">
+			 	and reg_date &lt;= #{searchUser.endTime}
+			</if>	
+		</where>
+		order by reg_date
+		limit ${searchUser.pageNo},${searchUser.pageSize}
+	</select>
+	<select id="getUserByUserCode" resultType="com.gage.beans.User">
+		select 
+			t.user_code as user_code,
+			t.username as userName,
+			t.password as passWord,
+			t.name as name,
+			t.age as age,
+			t.sex as sex,
+			t.phone as phone,
+			t.email as email,
+			t.address as address,
+			t.province_code as provinceCode,
+			tp.province_name as provinceName,
+			t.city_code as cityCode,
+			tc.city_name as cityName,
+			t.reg_date as regDate,
+			t.state as state
+		from tbl_user t
+		left join tbl_province tp on t.province_code = tp.province_code 
+		left join tbl_city tc on t.city_code = tc.city_code
+		where t.user_code = #{userCode}
+	</select>
+	
+	<update id="changeState" >
+		update tbl_user set state = #{arg1} where user_code=#{arg0}
+	</update>
+	
+	<select id="getAllOrderBySysPage" resultType="Integer">
+		select count(*) from tbl_order
+	</select>
+	<select id="getAllOrderBySys" resultType="com.gage.beans.sysOrder">
+		select 
+			t.order_code as orderCode,
+			t.order_name as orderName,
+			tot.text_descri as objectDesc,
+			tot.object_code as objectCode,
+			t.order_account as orderAccount,
+			t.order_date as orderDate,
+			tu1.user_code as saleUserCode,
+			tu1.username as saleUserName,
+			tu2.user_code as payUserCode,
+			tu2.username as payUserName,
+			t.trade_status as tradeStatus,
+			t.fh_status as fkStatus,
+			t.ys_status as ysStatus,
+			t.pj_status as pjStatus
+		from tbl_order t
+		LEFT JOIN tbl_object_trading tot on t.object_code = tot.object_code
+		LEFT JOIN tbl_user tu1 on tu1.user_code = tot.object_user_code
+		LEFT JOIN tbl_user tu2 on tu2.user_code = tot.trading_user
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+</mapper>  

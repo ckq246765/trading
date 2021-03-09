@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass
+        name="com.gage.controllers.LoginSysOrUserController" x="239" y="231"/>
+    <CommunicationClass name="com.gage.controllers.JumpToJsp" x="266" y="104"/>
+</ClassDiagram>

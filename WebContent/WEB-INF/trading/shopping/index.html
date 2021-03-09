@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link  />
+<link href="../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="../jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="../jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+	<style>
+		li{
+		display:inline;
+		line-height:24px;
+		height:auto;
+		float: left;
+		word-break:break-all;
+		word-wrap : break-word ;
+		padding:0px 5px; list-style:none;
+		}
+	</style>
+	
+	<!-- 顶部 -->
+	<div id="top" style="height: 40px; background-color: #96FED1; width: 100%;">
+		<div style="position: absolute; top: 2px; left: 15x; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">GAGE闲置</div>
+		
+		
+		<div style="position: absolute; top: 5px; left:53% ;color: red;font-family: 'times new roman'">
+			<a href=""><span style="color:red;font-size: 25px;">购物车清单</span></a>
+		</div>
+		<div>
+			<button style="position: absolute;top:8px;right: 3%;background: white;"><span>&laquo;</span><span style="color: red;">返回</span></button>
+		</div>
+</div>   
+	
+	<div style="position:relative;top:30px;width: 95%">
+		<!--<div>
+			<div style="position: relative; left: 30px; top: -10px;">
+				<div class="page-header">
+					<h3><span style="color: red;">购物车清单</span></h3>
+					<button style="position:absolute;top: -4px;right: 0%;color: white;background: red;"><span>&laquo;</span>返回</button>
+				</div>
+				
+			</div>
+		</div>-->
+		<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px; top:-30px;">
+			<div class="btn-group" style="position: relative; top: 18%;">
+			  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editDeptModal"><span class="glyphicon glyphicon-edit"></span> 点击结算</button>
+			  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+			</div>
+		</div>
+		<div style="position: relative; left: 30px; top: -10px;">
+			<table class="table table-hover" style="text-align: center;">
+				<thead>
+					<tr style="color: #B3B3B3;">
+						<td style="text-align: left;"><input type="checkbox" />全选</td>
+						<td>物品列表</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="active">
+						<td style="text-align: left;"><input type="checkbox" /></td>
+						<td>
+							<a href="../object/index.html" target="_parent">
+								<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+								</div> 
+								<div class="goods-text">
+									<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+									<p title="瓷白色">瓷白色</p>
+								</div>
+								<div class="goods-price">
+									<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+									<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+								</div> 
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: left;"><input type="checkbox" /></td>
+						<td>
+							<a href="../object/index.html" target="_parent">
+								<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+								</div> 
+								<div class="goods-text">
+									<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+									<p title="瓷白色">瓷白色</p>
+								</div>
+								<div class="goods-price">
+									<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+									<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+								</div> 
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: left;"><input type="checkbox" /></td>
+						<td>
+							<a href="../object/index.html" target="_parent">
+								<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+								</div> 
+								<div class="goods-text">
+									<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+									<p title="瓷白色">瓷白色</p>
+								</div>
+								<div class="goods-price">
+									<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+									<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+								</div> 
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+	<br>
+	<div style="text-align: center;">
+		<h2>
+			<span style="color: red;">推&nbsp;&nbsp;&nbsp;&nbsp;荐</span>
+		</h2>
+		<br><br><br>
+		<ul>
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>	
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>		
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>		
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>		
+		<li class="goods-panel">
+				 		<a href="../object/index.html" target="_parent">
+						    <div class="goods-title">
+				     			<span class="goods-user"><img data-src="用户头像" src="" lazy="loaded">用户名</span>
+					  			<span class="goods-time">35分钟前来过</span>
+					 		</div>
+							<div class="goods-img"><img data-src="图片" src="../img/陈克齐.jpg" lazy="loaded" style="width: 50px; height: 50px;">
+							</div> 
+							<div class="goods-text">
+								<p title="【京东转卖】Qin1s+VoLTE老人手机双卡双待移动联通电信4G"><i></i>Qin1s+VoLTE老人手机双卡双待移动联通电信4G</p> <!---->
+								<p title="瓷白色">瓷白色</p>
+							</div>
+							<div class="goods-price">
+								<span class="goods-price--red"><span><i>￥</i>299.00</span></span> 
+								<span class="goods-price--grey"><span><i>￥</i>399.00</span></span>
+							</div> 
+							<div class="goods-site"><i></i>来自内蒙古呼和浩特市赛罕区</div>
+						</a>
+					</li>		
+	</ul>
+	</div>
+			
+</body>
+</html>

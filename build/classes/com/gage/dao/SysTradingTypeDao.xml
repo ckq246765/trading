@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gage.dao.SysTradingTypeDao">
+	<select id="getAllTradingType" resultType="com.gage.beans.TradingType">
+		select trading_type_code as tradingTypeCode,trading_type_name as tradingTypeName from tbl_trading_type limit ${arg0},${arg1}
+	</select>
+	
+	<select id="getAllAccountTradingType" resultType="Integer">
+		select count(1) from tbl_trading_type
+	</select>
+	
+	<select id="getTradingTypeCode" resultType="String" parameterType="String">
+		select trading_type_code from tbl_trading_type where trading_type_code=#{tradingTypeCode}
+	</select>
+	
+	<insert id="saveTradingType" parameterType="com.gage.beans.TradingType">
+		insert into tbl_trading_type (trading_type_code,trading_type_name) values(#{tradingTypeCode},#{tradingTypeName})
+	</insert>
+	
+	<select id="getTradingTypeByCode" resultType="com.gage.beans.TradingType">
+		select trading_type_code as tradingTypeCode,trading_type_name as tradingTypeName from tbl_trading_type where trading_type_code=#{arg0}
+	</select>
+	
+	<update id="changeTradingType" parameterType="com.gage.beans.TradingType">
+		update tbl_trading_type set trading_type_name = #{tradingTypeName} where trading_type_code = #{tradingTypeCode}
+	</update>
+	
+	<delete id="deleteTradingType" parameterType="String">
+		delete from tbl_trading_type where trading_type_code in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="getListObjecCodetAccount" resultType="Integer">
+		select count(*) from tbl_object_trading where object_type_code = #{arg0}
+	</select>
+	<select id="getListParObjecCodetPageAccount" resultType="Integer">
+		select count(*) from tbl_object_trading where par_object_code = #{arg0}
+	</select>
+</mapper>
